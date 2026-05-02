@@ -1,0 +1,61 @@
+# Entorno virtual
+venv/
+env/
+ENV/
+
+# Variables de entorno secretas
+.env
+.env.local
+.env.production
+
+# Archivos de configuración local
+config/local_settings.py
+config/.env
+
+# Django
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.sqlite3
+db.sqlite3
+migrations/
+!/migrations/__init__.py
+
+# Media y archivos subidos
+media/
+staticfiles/
+static_root/
+
+# Logs
+*.log
+log/
+logs/
+
+# Archivos sensibles
+*.pem
+*.key
+*.crt
+*.p12
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Reportes de pruebas
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# Archivos de respaldo
+*.bak
+*.backup
