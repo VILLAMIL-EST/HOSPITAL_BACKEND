@@ -52,4 +52,4 @@ class DataSecurity:
             raise ValueError("La información está corrupta o es inválida")
         except Exception as e:
             logger.error(f"Error desencriptando datos: {e}")
-            raise ValueError("No se pudo desencriptar la información")
+            raise ValueError("No se pudo desencriptar la información")c
