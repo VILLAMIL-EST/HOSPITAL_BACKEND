@@ -130,14 +130,14 @@ class RegisterView(generics.CreateAPIView):
         # Enviar email de verificación
         if send_verification_email(user, verification_token.token):
             return Response({
-                'message': '✅ Usuario registrado exitosamente. Revisa tu correo (o la consola de Django) para verificar tu cuenta.',
+                'message': ' Usuario registrado exitosamente. Revisa tu correo y acepta la verificación para activar tu cuenta.',
                 'user_id': user.id,
                 'email': user.email
             }, status=status.HTTP_201_CREATED)
         else:
             user.delete()
             return Response({
-                'error': '❌ Error al enviar el correo de verificación. Intenta nuevamente.'
+                'error': ' Error al enviar el correo de verificación. Intenta nuevamente.'
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
