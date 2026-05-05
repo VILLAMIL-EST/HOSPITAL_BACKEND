@@ -1,5 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+import uuid
+from django.utils import timezone
 
 class CustomUser(AbstractUser):
     """Modelo de usuario personalizado para el Hospital El Salvador de Ubaté"""
@@ -48,7 +50,7 @@ class CustomUser(AbstractUser):
         on_delete=models.SET_NULL, 
         null=True, 
         blank=True,
-        related_name='verified_users',  # ← CORREGIDO
+        related_name='verified_users',
         verbose_name='Verificado por'
     )
     verified_at = models.DateTimeField(null=True, blank=True, verbose_name='Fecha de verificación')
@@ -60,7 +62,7 @@ class CustomUser(AbstractUser):
         'self', 
         symmetrical=False, 
         blank=True,
-        related_name='tutors',  # ← CORREGIDO
+        related_name='tutors',
         verbose_name='Pacientes a cargo'
     )
     
@@ -81,3 +83,30 @@ class CustomUser(AbstractUser):
     class Meta:
         verbose_name = 'Usuario'
         verbose_name_plural = 'Usuarios'
+
+
+# ✅ NUEVO MODELO: Token para verificación de email
+class EmailVerificationToken(models.Model):
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    token = models.UUIDField(default=uuid.uuid4, unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    def is_expired(self):
+        # El token expira después de 24 horas (86400 segundos)
+        return (timezone.now() - self.created_at).seconds > 86400
+    
+    def __str__(self):
+        return f"{self.user.email} - {self.token}"
+        
+    # ✅ NUEVO MODELO: Token para verificación de email
+class EmailVerificationToken(models.Model):
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    token = models.UUIDField(default=uuid.uuid4, unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    def is_expired(self):
+        # El token expira después de 24 horas (86400 segundos)
+        return (timezone.now() - self.created_at).seconds > 86400
+    
+    def __str__(self):
+        return f"{self.user.email} - {self.token}"

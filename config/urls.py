@@ -1,7 +1,7 @@
 from django.contrib import admin
-from django.urls import path, include  # ← AGREGAR 'include' aquí
+from django.urls import path, include  
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/users/', include('users.urls')),  # ← Ahora funciona
+    path('api/users/', include('users.urls')),  
 ]

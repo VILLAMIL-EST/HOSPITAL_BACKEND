@@ -156,15 +156,19 @@ SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
 
-# Configuración de email
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = os.getenv('EMAIL_HOST')
-EMAIL_PORT = int(os.getenv('EMAIL_PORT', 587))
-EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', 'True') == 'True'
-EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+# ============================================
+# CONFIGURACIÓN DE EMAIL - MODO CONSOLA
+# ============================================
+# Modo consola: Muestra los correos en la terminal (no los envía realmente)
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-# Django REST Framework configuration
+# URL del frontend (para el enlace de verificación)
+FRONTEND_URL = os.getenv('FRONTEND_URL', 'http://localhost:3000')
+
+# ============================================
+# DJANGO REST FRAMEWORK
+# ============================================
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
@@ -179,13 +183,32 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 10,
 }
 
-# CORS Configuration (para conectar con React)
+# ============================================
+# CORS CONFIGURATION
+# ============================================
+
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
 ]
 
 CORS_ALLOW_CREDENTIALS = True
 
 # Custom user model
 AUTH_USER_MODEL = 'users.CustomUser'
+# ============================================
+# CONFIGURACIÓN DE EMAIL REAL (GMAIL)
+# ============================================
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+# URL del frontend (para el enlace de verificación)
+FRONTEND_URL = os.getenv('FRONTEND_URL', 'http://localhost:3000')
