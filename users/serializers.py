@@ -13,11 +13,32 @@ class UserSerializer(serializers.ModelSerializer):
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=True, style={'input_type': 'password'})
     password2 = serializers.CharField(write_only=True, required=True, style={'input_type': 'password'})
+    phone = serializers.CharField(required=True)  # ← AGREGAR ESTA LÍNEA (hace obligatorio el teléfono)
 
     class Meta:
         model = CustomUser
         fields = ['username', 'email', 'password', 'password2', 'first_name', 'last_name',
                   'document_type', 'document_number', 'role', 'phone', 'address', 'birth_date']
+
+    def validate_phone(self, value):
+        """Validación de teléfono: exactamente 10 dígitos, solo números"""
+        
+        # Si el campo está vacío, es válido (opcional)
+        if not value:
+            raise serializers.ValidationError("El teléfono es obligatorio")  # ← CAMBIADO
+        
+        # Limpiar espacios, guiones, paréntesis
+        cleaned = re.sub(r'[\s\-\(\)]', '', value)
+        
+        # Verificar que solo contenga números
+        if not cleaned.isdigit():
+            raise serializers.ValidationError("El teléfono solo debe contener números")
+        
+        # Verificar que tenga exactamente 10 dígitos
+        if len(cleaned) != 10:
+            raise serializers.ValidationError("El teléfono debe tener exactamente 10 dígitos")
+        
+        return cleaned
 
     def validate_password(self, value):
         """Validación de contraseña segura"""
@@ -49,9 +70,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         return attrs
 
     def create(self, validated_data):
-        # ✅ IMPORTANTE: Eliminar password2 ANTES de crear el usuario
-        validated_data.pop('password2')  # ← Esta línea es CRUCIAL
-        
+        validated_data.pop('password2')
         password = validated_data.pop('password')
         user = CustomUser(**validated_data)
         user.set_password(password)
